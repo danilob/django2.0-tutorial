@@ -1,17 +1,38 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404,render
 from django.http import HttpResponse
 
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
+from .models import Schedule,Action
+from .forms import ActionForm
 # Create your views here.
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the activities index.")
+    #return HttpResponse("Hello, world. You're at the activities index.")
+    #latest_question_list = Schedule.objects.order_by('-date_begin')[:5]
+    #output = ', '.join([q.description for q in latest_question_list])
+    #return HttpResponse(output)
+    #def index(request):
+    latest_schedule_list = Schedule.objects.order_by('-date_begin')[:5]
+    context = {'latest_schedule_list': latest_schedule_list}
+    return render(request, 'activities/index.html', context)
 
-def detail(request, question_id):
-    return HttpResponse("You're looking the shedule %s." % question_id)
+def detail(request, schedule_id):
+    schedule = get_object_or_404(Schedule, pk=schedule_id)
+    return render(request, 'activities/details.html', {'schedule': schedule})
 
-def listactions(request, question_id):
-    response = "You're looking at the list actions of the schedule %s."
-    return HttpResponse(response % question_id)
+def edit_action(request, action_id):
+    action = get_object_or_404(Action, pk=action_id)
+    form = ActionForm(instance=action)
+    if request.method == 'POST':
+        form = ActionForm(request.POST,instance=action)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('activities:detail', args=[
+            action.schedule.id])) 
+    else:
+        form = ActionForm(instance=action)
+    context = {'action': action, 'form': form}
+    return render(request, 'activities/action.html', context)
 
-def priority(request, question_id):
-    return HttpResponse("You're changing the priority of the schedule's action  %s." % question_id)

@@ -16,6 +16,11 @@ class Schedule(models.Model):
     def is_open(self):
         return (timezone.now() >= self.date_begin and timezone.now() <= self.date_end) 
 
+    def ordered_action_set(self):
+        return self.action_set.all().order_by('-priority')
+
+    is_open.short_description = 'Is really opened?'
+
 
 class Action(models.Model):
     schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
@@ -23,7 +28,8 @@ class Action(models.Model):
     priority = models.IntegerField(default=0)
     closed = models.BooleanField(default=False)
     finish = models.BooleanField(default=False)
-    notes = models.CharField(max_length=300)
+    notes = models.CharField(max_length=300,blank=True)
 
     def __str__(self):
         return self.description
+

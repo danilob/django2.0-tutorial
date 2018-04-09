@@ -1,0 +1,13 @@
+{% extends 'activities/base.html' %}
+{% block contents %}
+<h1>{{ schedule.description }}</h1>
+<ol>
+{% for action in schedule.ordered_action_set %}
+    <li>[{{ action.priority }}] <a href="{% url 'activities:edit-action' action.id %}">{{ action.description }}</a><br>
+        Status: Encerrada ({% if action.closed %}Sim{% else %}Não{% endif %}); Finalizada ({% if action.finish %}Sim{% else %}Não{% endif %})<br>
+        Notes: {% if not action.notes %} Nenhuma nota {% else %} {{ action.notes }} {% endif %} <br>
+        <hr>
+    </li>
+{% endfor %}
+</ol>
+{% endblock %}

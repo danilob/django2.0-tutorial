@@ -1,0 +1,12 @@
+{% extends 'activities/base.html' %}
+{% block contents %}
+{% if latest_schedule_list %}
+    <ul>
+    {% for schedule in latest_schedule_list %}
+        <li><a href="{% url 'activities:detail' schedule.id %}">{{ schedule.description }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No schedules are available.</p>
+{% endif %}
+{% endblock%}

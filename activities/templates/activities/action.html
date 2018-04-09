@@ -1,0 +1,10 @@
+{% extends 'activities/base.html' %}
+{% block contents %}
+<h1>Editar ação {{ action.id }}</h1>
+
+<form method="post" action="{% url 'activities:edit-action' action.id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="save">
+</form>
+{% endblock %}

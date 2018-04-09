@@ -1,0 +1,20 @@
+body {
+    margin:50px
+}
+
+li a {
+    color: green;
+    font-size: 20px;
+}
+
+#titulo{
+    height: 200px;
+    width:50%;
+    background: url("images/django.png");
+    background-size: cover; 
+    background-position: center center;
+}
+
+#conteudo{
+
+}
